@@ -1,0 +1,11 @@
+[
+  {
+    "bankCode": "HDFC",
+    "url": "http://localhost:8082"
+  },
+  {
+    "bankCode": "AXIS",
+    "url": "http://host.docker.internal:8082"
+  }
+]
+
