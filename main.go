@@ -1,9 +1,8 @@
 package main
 
-import "fmt"
-
 func main() {
 	data := readJson("./seed.json")
+	client := NewHttpClient()
+	client
 
-	fmt.Println(data)
 }

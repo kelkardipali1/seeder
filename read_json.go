@@ -9,9 +9,7 @@ import (
 	"os"
 )
 
-
-
-func readJson(filePath string) interface{} {
+func readJson(filePath string) []map[string]interface{} {
 	f, err := os.Open(filePath)
 	if err != nil {
 		fmt.Println(err)
@@ -30,26 +28,19 @@ func readJson(filePath string) interface{} {
 	}
 
 	ad := json.NewDecoder(ab)
-
-	var data map[string]interface{}
+	var data []map[string]interface{}
 	err = ad.Decode(&data)
 	if err == nil {
-		fmt.Println(1)
 		return data
 	}
 
-	md := json.NewDecoder(mb)
 
-	var mdata []map[string]interface{}
-	err = md.Decode(&mdata)
+	md := json.NewDecoder(mb)
+	var mData map[string]interface{}
+	err = md.Decode(&mData)
 	if err == nil {
-		fmt.Println("mdata",mdata)
-		for _, j := range mdata {
-			fmt.Println("---->",j)
-		}
-		return mdata
+		return []map[string]interface{}{mData}
 	}
-	fmt.Println("unable to read json")
 
 	return nil
 }
