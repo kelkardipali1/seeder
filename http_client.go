@@ -3,8 +3,10 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
+	"io"
+	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -18,19 +20,24 @@ type defaultHTTPClient struct {
 
 func (dc *defaultHTTPClient) doSomething(targetUrl string, body []map[string]interface{}) error {
 	for _, value := range body {
-		reqBody, err:= parseBody(value)
+		reqBody, err := parseBody(value)
 		if err != nil {
+			log.Fatal("Json can not be parse")
 			return err
 		}
-		fmt.Println("--->",string(reqBody))
-		//req, err := http.NewRequest(http.MethodPost, targetUrl, bytes.NewBuffer(reqBody))
-		//if err != nil {
-		//	return err
-		//}
-		//req.Header.Add("Content-Type", "application/json")
+
+		response, err := dc.client.Post(targetUrl, "application/json", bytes.NewBuffer(reqBody))
+		if err != nil {
+			log.Fatal("Invalid url")
+			return err
+		}
+
+		buf := new(strings.Builder)
+		_, err = io.Copy(buf, response.Body)
+		log.Println("response", buf.String())
 
 	}
-
+	return nil
 }
 
 func parseBody(body map[string]interface{}) ([]byte, error) {

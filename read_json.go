@@ -3,7 +3,8 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
+	"log"
+
 	"io"
 	"io/ioutil"
 	"os"
@@ -12,7 +13,7 @@ import (
 func readJson(filePath string) []map[string]interface{} {
 	f, err := os.Open(filePath)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal("Invalid file path")
 		return nil
 	}
 
@@ -23,7 +24,7 @@ func readJson(filePath string) []map[string]interface{} {
 
 	_, err = mw.Write(b)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return nil
 	}
 
@@ -34,13 +35,12 @@ func readJson(filePath string) []map[string]interface{} {
 		return data
 	}
 
-
 	md := json.NewDecoder(mb)
 	var mData map[string]interface{}
 	err = md.Decode(&mData)
 	if err == nil {
 		return []map[string]interface{}{mData}
 	}
-
+	log.Fatal("unable to read json")
 	return nil
 }

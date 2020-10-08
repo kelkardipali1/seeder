@@ -1,8 +1,17 @@
 package main
 
+import (
+	"flag"
+)
+
 func main() {
-	data := readJson("./seed.json")
+	var url, filePath string
+	flag.StringVar(&url, "url", "", "endpoint url")
+	flag.StringVar(&filePath, "filePath", "", "json file path ")
+	flag.Parse()
+
+	data := readJson(filePath)
 	client := NewHttpClient()
-	client
+	client.doSomething(url, data)
 
 }
