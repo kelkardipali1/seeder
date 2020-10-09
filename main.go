@@ -13,7 +13,7 @@ func main() {
 
 	data, err := readJson(filePath)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println(err.Error())
 	}
 	client := NewHttpClient()
 	client.doSomething(url, data)

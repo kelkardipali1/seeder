@@ -5,20 +5,17 @@ import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
 func readJson(filePath string) ([]map[string]interface{}, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
-		log.Println(err.Error())
 		return nil, err
 	}
 
 	b, err := ioutil.ReadAll(f)
 	if err != nil {
-		log.Println(err.Error())
 		return nil, err
 	}
 
@@ -27,7 +24,6 @@ func readJson(filePath string) ([]map[string]interface{}, error) {
 
 	_, err = mw.Write(b)
 	if err != nil {
-		log.Println(err.Error())
 		return nil, err
 	}
 
@@ -44,6 +40,5 @@ func readJson(filePath string) ([]map[string]interface{}, error) {
 	if err == nil {
 		return []map[string]interface{}{mData}, nil
 	}
-	log.Println(err.Error())
 	return nil, err
 }

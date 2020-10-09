@@ -23,11 +23,13 @@ func (dc *defaultHTTPClient) doSomething(targetUrl string, body []map[string]int
 		reqBody, err := parseBody(value)
 		if err != nil {
 			log.Println(err.Error())
+			continue
 		}
 
 		response, err := dc.client.Post(targetUrl, "application/json", bytes.NewBuffer(reqBody))
 		if err != nil {
 			log.Println(err.Error())
+			continue
 		}
 
 		if code := response.StatusCode; code >= 400 && code <= 600 {
