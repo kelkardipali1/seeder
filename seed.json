@@ -1,6 +1,11 @@
-{
-  "bankCode": "bcjk",
-  "url": "http://localhost:8082"
-}
-
+[
+  {
+    "bankCode": "ddefd",
+    "url": "http://localhost:8082"
+  },
+  {
+    "bankCode": "errff",
+    "url": "http://host.docker.internal:8082"
+  }
+]
 

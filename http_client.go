@@ -11,33 +11,38 @@ import (
 )
 
 type HTTPClient interface {
-	doSomething(targetUrl string, body []map[string]interface{}) error
+	doSomething(targetUrl string, body []map[string]interface{})
 }
 
 type defaultHTTPClient struct {
 	client *http.Client
 }
 
-func (dc *defaultHTTPClient) doSomething(targetUrl string, body []map[string]interface{}) error {
+func (dc *defaultHTTPClient) doSomething(targetUrl string, body []map[string]interface{}) {
 	for _, value := range body {
 		reqBody, err := parseBody(value)
 		if err != nil {
-			log.Fatal("Json can not be parse")
-			return err
+			log.Println(err.Error())
 		}
 
 		response, err := dc.client.Post(targetUrl, "application/json", bytes.NewBuffer(reqBody))
 		if err != nil {
-			log.Fatal("Invalid url")
-			return err
+			log.Println(err.Error())
 		}
 
-		buf := new(strings.Builder)
-		_, err = io.Copy(buf, response.Body)
-		log.Println("response", buf.String())
+		if code := response.StatusCode; code >= 400 && code <= 600 {
+			buf := new(strings.Builder)
+			_, err = io.Copy(buf, response.Body)
+
+			log.Printf("unable to seed %s because %s", reqBody, buf.String())
+		}
+		//else if code := response.StatusCode; code >= 200 && code < 300 {
+		//	log.Println("data seed successfully")
+		//}
 
 	}
-	return nil
+	log.Println("done")
+
 }
 
 func parseBody(body map[string]interface{}) ([]byte, error) {

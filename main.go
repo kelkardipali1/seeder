@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"log"
 )
 
 func main() {
@@ -10,7 +11,10 @@ func main() {
 	flag.StringVar(&filePath, "filePath", "", "json file path ")
 	flag.Parse()
 
-	data := readJson(filePath)
+	data, err := readJson(filePath)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 	client := NewHttpClient()
 	client.doSomething(url, data)
 
