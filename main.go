@@ -15,7 +15,7 @@ func main() {
 	if err != nil {
 		log.Println(err.Error())
 	}
-	client := NewHttpClient()
-	client.doSomething(url, data)
+	client := NewHTTPRequest()
+	client.createRequest(url, data)
 
 }
