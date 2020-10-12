@@ -3,30 +3,31 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
-	"log"
 	"strings"
 )
 
-type HTTPRequest interface {
-	createRequest(targetUrl string, body []map[string]interface{})
-}
+//Todo chnage file name
 
+//Todo change struct name
 type httpRequest struct {
 	httpClient HTTPClient
 }
 
-func (dc *httpRequest) createRequest(targetUrl string, body []map[string]interface{}) {
+//Todo change func name
+func (dc *httpRequest) createRequest(targetUrl string, body []map[string]interface{}) []error {
+	var error []error
 	for _, value := range body {
 		reqBody, err := parseBody(value)
 		if err != nil {
-			log.Println(err.Error())
+			error = append(error, err)
 			continue
 		}
 
 		response, err := dc.httpClient.Post(targetUrl, "application/json", bytes.NewBuffer(reqBody))
 		if err != nil {
-			log.Println(err.Error())
+			error = append(error, err)
 			continue
 		}
 
@@ -34,10 +35,11 @@ func (dc *httpRequest) createRequest(targetUrl string, body []map[string]interfa
 			buf := new(strings.Builder)
 			_, err = io.Copy(buf, response.Body)
 
-			log.Printf("unable to seed %s because %s", reqBody, buf.String())
+			error = append(error, fmt.Errorf("unable to seed %s because %s", reqBody, buf.String()))
+
 		}
 	}
-	log.Println("done")
+	return error
 }
 
 func parseBody(body map[string]interface{}) ([]byte, error) {
@@ -48,8 +50,8 @@ func parseBody(body map[string]interface{}) ([]byte, error) {
 	return reqBody, nil
 }
 
-func NewHTTPRequest() HTTPRequest {
+func NewHTTPRequest(client HTTPClient) *httpRequest {
 	return &httpRequest{
-		httpClient: NewHttpClient(),
+		httpClient: client,
 	}
 }

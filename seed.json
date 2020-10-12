@@ -1,10 +1,10 @@
 [
   {
-    "bankCode": "ddefd",
+    "bankCode": "csdvd",
     "url": "http://localhost:8082"
   },
   {
-    "bankCode": "errff",
+    "bankCode": "fedfde",
     "url": "http://host.docker.internal:8082"
   }
 ]

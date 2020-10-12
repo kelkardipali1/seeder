@@ -15,7 +15,16 @@ func main() {
 	if err != nil {
 		log.Println(err.Error())
 	}
-	client := NewHTTPRequest()
-	client.createRequest(url, data)
+	client := NewHttpClient()
+	req := NewHTTPRequest(client)
 
+	error := req.createRequest(url, data)
+	if len(error) != 0 {
+		for _, err := range error {
+			log.Println(err.Error())
+		}
+		return
+	}
+
+	log.Print("Done")
 }
